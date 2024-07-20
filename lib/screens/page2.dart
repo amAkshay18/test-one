@@ -1,52 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:test1/screens/page3.dart';
-import 'package:test1/widgets/appbarwidget.dart';
+import 'package:provider/provider.dart';
+import 'package:test1/provider/name_provider.dart';
+import 'package:test1/widgets/appbar_widget.dart';
+import 'package:test1/widgets/textfield_widget.dart';
 
-class PageTwo extends StatefulWidget {
-  final String firstName;
-  const PageTwo({super.key, required this.firstName});
-
-  @override
-  State<PageTwo> createState() => _PageTwoState();
-}
-
-class _PageTwoState extends State<PageTwo> {
-  final TextEditingController _lastNameController = TextEditingController();
-
-  @override
-  void dispose() {
-    _lastNameController.dispose();
-    super.dispose();
-  }
+class PageTwo extends StatelessWidget {
+  const PageTwo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final nameProvider = Provider.of<NameProvider>(context);
+    final TextEditingController lastNameController = TextEditingController();
+
     return Scaffold(
       appBar: AppBarWidget(
         title: 'PageTwo',
         icon: Icons.arrow_right_alt,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PageThree(
-                firstName: widget.firstName,
-                lastName: _lastNameController.text,
-              ),
-            ),
-          );
+          nameProvider.setLastName(lastNameController.text);
+          Navigator.pushNamed(context, '/pageThree');
         },
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            TextField(
-              controller: _lastNameController,
-              decoration: const InputDecoration(
-                labelText: 'Last Name',
-                border: OutlineInputBorder(),
-              ),
+            TextFieldWidget(
+              controller: lastNameController,
+              labelText: 'Last Name',
             ),
           ],
         ),
